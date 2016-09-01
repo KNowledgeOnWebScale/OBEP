@@ -9,11 +9,9 @@ EventClause -> ['**NAMED**'] '**EVENT**' eventIRI (EventDecl | PatternDecl)
     
 EventDecl  ->  [Manchester Syntax Description](https://www.w3.org/TR/owl2-manchester-syntax/#description)
 
-PatternDecl -> '**WHEN**' MatchClause [IFClause]
+PatternDecl -> '**WHEN**' PatternExpr [IFDecl]
 
-MatchClause -> '**MATCH**' patternExpr
-
-PatternExpr ->  FollowedByExpr [**WITHIN** TimePeriod ]
+PatternExpr ->  '**MATCH**' FollowedByExpr [**WITHIN** TimePeriod ]
 
 TimePeriod ->  INTEGER (ms | s | m | h | d | w)
 
@@ -25,9 +23,9 @@ AndExpr -> qualifyExpr ( **AND** qualifyExpr)*
 
 EveryOrNotExpr ->  ['**EVERY**' | '**NOT**' ]  \( eventIRI ['**AS**' eventAltIri] | '(' patternExpr ')' )*
 
-IFClause -> '**IF**' '{' '**EVENT**' (eventIRI | Var) FilterExpr '}'
+IFDecl -> '**IF**' '{' '**EVENT**' (eventIRI | Var) FilterExpr '}'
 
-FilterExpr -> '{' ( BGP | FilterClause)* '}'
+FilterExpr -> '{' ( BGP | Filter)* '}'
 
 ##Example
 
