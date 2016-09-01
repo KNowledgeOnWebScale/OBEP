@@ -23,7 +23,7 @@ OrExpr -> andExpr (**OR** andExpr)*
 
 AndExpr -> qualifyExpr ( **AND** qualifyExpr)*
 
-EveryOrNotExpr ->  ['**EVERY**' | '**NOT**' ] % ( eventIRI ['**AS**' eventAltIri] | '(' patternExpr ')' )*
+EveryOrNotExpr ->  ['**EVERY**' | '**NOT**' ]  \( eventIRI ['**AS**' eventAltIri] | '(' patternExpr ')' )*
 
 IFClause -> '**IF**' '{' '**EVENT**' (eventIRI | Var) FilterExpr '}'
 
