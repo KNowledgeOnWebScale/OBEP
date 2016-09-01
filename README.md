@@ -9,11 +9,7 @@ NamedEventClause -> ['**NAMED**'] '**EVENT**' eventIRI (EventDecl | PatternDecl)
     
 EventDecl  ->  [Manchester Syntax Description](https://www.w3.org/TR/owl2-manchester-syntax/#description)
 
-PatternDecl -> '**WHEN**'
-
-	MatchClause
-
-	[IFClause]
+PatternDecl -> '**WHEN**' MatchClause [IFClause]
 
 MatchClause -> '**MATCH**' patternExpr
 
