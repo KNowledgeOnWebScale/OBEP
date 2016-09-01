@@ -28,3 +28,24 @@ EveryOrNotExpr ->  ['**EVERY**' | '**NOT**' ]  \( eventIRI ['**AS**' eventAltIri
 IFClause -> '**IF**' '{' '**EVENT**' (eventIRI | Var) FilterExpr '}'
 
 FilterExpr -> '{' ( BGP | FilterClause)* '}'
+
+##Example
+
+**PREFIX** : <http://example.org> [...]
+
+**EVENT** :SmokeDetectionEvent *subClassOf* 
+	( ssniot:hasContext *some* 
+    	( ssniot:observedProperty *some* (ssn:Smoke) ) ) .
+
+**EVENT** :HighTemperaturEvent *subClassOf*
+    ( ssniot:hasContext *some* 
+    	( ssniot:observedProperty *some* (ssn:Temperature) ) )
+
+**NAMED** **EVENT** :Fire {
+     **MATCH** :HighTemperaturEvent *->* :SmokeDetectionEvent **WITHIN** (5m)
+     **IF** {
+        **EVENT** :SmokeDetectionEvent { ?l1 dul:hasDataValue ?v}
+        **EVENT** :HighTemperaturEvent { ?l2 dul:hasDataValue ?v}
+     }
+}
+
