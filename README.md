@@ -31,21 +31,19 @@ FilterExpr -> '{' ( BGP | FilterClause)* '}'
 
 ##Example
 
-**PREFIX** : <http://example.org> [...]
+**PREFIX** : <http://example.org> [...]<br/>
 
-**EVENT** :SmokeDetectionEvent *subClassOf* 
-	( ssniot:hasContext *some* 
-    	( ssniot:observedProperty *some* (ssn:Smoke) ) ) .
+**EVENT** :SmokeDetectionEvent *subClassOf* <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ssniot:hasContext *some* ( ssniot:observedProperty *some* (ssn:Smoke) ) ) .<br/>
 
-**EVENT** :HighTemperaturEvent *subClassOf*
-    ( ssniot:hasContext *some* 
-    	( ssniot:observedProperty *some* (ssn:Temperature) ) )
+**EVENT** :HighTemperaturEvent *subClassOf*<br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ssniot:hasContext *some*  ( ssniot:observedProperty *some* (ssn:Temperature) ) )<br/><br/>
 
-**NAMED** **EVENT** :Fire {
-     **MATCH** :HighTemperaturEvent *->* :SmokeDetectionEvent **WITHIN** (5m)
-     **IF** {
-        **EVENT** :SmokeDetectionEvent { ?l1 dul:hasDataValue ?v}
-        **EVENT** :HighTemperaturEvent { ?l2 dul:hasDataValue ?v}
-     }
-}
+**NAMED** **EVENT** :Fire {<br/>
+&nbsp;&nbsp;&nbsp;**MATCH** :HighTemperaturEvent *->* :SmokeDetectionEvent **WITHIN** (5m)<br/>
+&nbsp;&nbsp;&nbsp;**IF** {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**EVENT** :SmokeDetectionEvent { ?l1 dul:hasDataValue ?v}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**EVENT** :HighTemperaturEvent { ?l2 dul:hasDataValue ?v}<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+}<br/>
 
