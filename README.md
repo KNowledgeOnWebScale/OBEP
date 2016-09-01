@@ -5,7 +5,7 @@ DELP is a  Description Logic syntax for Event Processing.
 
 <SPARQL-like prefix declaration>
 
-NamedEventClause -> ['**NAMED**'] '**EVENT**' eventIRI (EventDecl | PatternDecl)
+EventClause -> ['**NAMED**'] '**EVENT**' eventIRI (EventDecl | PatternDecl)
     
 EventDecl  ->  [Manchester Syntax Description](https://www.w3.org/TR/owl2-manchester-syntax/#description)
 
@@ -13,9 +13,9 @@ PatternDecl -> '**WHEN**' MatchClause [IFClause]
 
 MatchClause -> '**MATCH**' patternExpr
 
-PatternExpr ->  followedByExpression [**WITHIN** Time_period ]
+PatternExpr ->  FollowedByExpr [**WITHIN** TimePeriod ]
 
-Time_period ->  INTEGER (ms | s | m | h | d | w)
+TimePeriod ->  INTEGER (ms | s | m | h | d | w)
 
 FollowedByExpr ->  orExpr ((['**NOT**'] FOLLOWED_BY) andExpr)*	
 
