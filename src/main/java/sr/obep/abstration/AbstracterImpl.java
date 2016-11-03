@@ -16,8 +16,8 @@ import org.semanticweb.owlapi.reasoner.NodeSet;
 import lombok.Getter;
 import lombok.Setter;
 import sr.obep.OBEPEngine;
-import sr.obep.OBEPQuery;
-import sr.obep.OBEPQueryImpl;
+import sr.obep.querying.OBEPQuery;
+import sr.obep.querying.OBEPQueryImpl;
 import sr.obep.SemanticEvent;
 
 @Setter

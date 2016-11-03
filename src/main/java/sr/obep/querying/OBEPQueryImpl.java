@@ -13,6 +13,8 @@ import org.apache.jena.sparql.core.VarExprList;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.graph.NodeConst;
 import org.apache.jena.sparql.syntax.*;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
+
 import sr.obep.parser.delp.EventCalculusDecl;
 import sr.obep.parser.delp.EventDecl;
 import sr.obep.parser.sparql.SPARQLQuery;
@@ -120,4 +122,7 @@ public class OBEPQueryImpl extends SPARQLQuery implements OBEPQuery {
         return eventDeclarations.get(peek);
     }
 
+    public Set<OWLEquivalentClassesAxiom> getEventDefinitions(){
+		return Collections.EMPTY_SET;
+	}
 }
