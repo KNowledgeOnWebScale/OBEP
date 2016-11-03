@@ -3,10 +3,10 @@ PREFIX ssniot: <http://IBCNServices.github.io/Accio-Ontology/SSNiot#>
 PREFIX ssn: <http://IBCNServices.github.io/Accio-Ontology/ontologies/ssn#>
 PREFIX dul: <http://IBCNServices.github.io/Accio-Ontology/ontologies/ssn#>
 
-NAMED EVENT :SmokeFilter 
+NAMED EVENT :SmokeFilter AS
     subClassOf ( ssniot:hasContext some ( ssn:observedProperty some (ssniot2:Smoke) ) ) .
 
-NAMED EVENT :TemperatureFilter subClassOf 
+NAMED EVENT :TemperatureFilter subClassOf AS
 	( ssniot:hasContext some ( ssniot:observedProperty some (ssn:Temperature) ) )
 
 NAMED EVENT :A {
