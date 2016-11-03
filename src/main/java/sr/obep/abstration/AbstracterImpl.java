@@ -49,7 +49,7 @@ public class AbstracterImpl implements Abstracter {
 	public void registerQuery(OBEPQuery q) {
 		for (OWLEquivalentClassesAxiom eventDef : q.getEventDefinitions()) {
 			manager.addAxiom(ontology, eventDef);
-			eventDef.namedClasses().forEach(def -> eventDefinitions.add(def.toString()));
+			eventDef.namedClasses().forEach(def -> eventDefinitions.add(def.getIRI().toString()));
 		}
 		reasoner.flush();
 	}
@@ -61,6 +61,7 @@ public class AbstracterImpl implements Abstracter {
 		manager.addAxioms(ontology, se.getAxioms());
 		// extract types event
 		reasoner.flush();
+		
 		NodeSet<OWLClass> inferedClasses = reasoner.getTypes(se.getMessage(), false);
 		for (OWLClass owlclss : inferedClasses.getFlattened()) {
 			String clss = owlclss.getIRI().toString();

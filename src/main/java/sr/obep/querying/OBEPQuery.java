@@ -3,6 +3,7 @@ package sr.obep.querying;
 import java.util.Collections;
 import java.util.Set;
 
+import org.apache.jena.query.Query;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 
 /**
@@ -11,4 +12,6 @@ import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 public interface OBEPQuery {
 	
 	public Set<OWLEquivalentClassesAxiom> getEventDefinitions();
+	
+	public Query getQ();
 }

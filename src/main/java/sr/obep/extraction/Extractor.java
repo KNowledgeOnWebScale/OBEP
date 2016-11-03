@@ -3,8 +3,7 @@ package sr.obep.extraction;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import sr.obep.OBEPEngine;
-import sr.obep.OBEPQuery;
-import sr.obep.OBEPQueryImpl;
+import sr.obep.querying.OBEPQuery;
 import sr.obep.SemanticEvent;
 
 /**
