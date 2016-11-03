@@ -6,7 +6,6 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.QueryBuildException;
-import org.apache.jena.query.QueryException;
 import org.apache.jena.sparql.core.Prologue;
 import org.apache.jena.sparql.core.TriplePath;
 import org.apache.jena.sparql.core.Var;
@@ -14,6 +13,7 @@ import org.apache.jena.sparql.core.VarExprList;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.graph.NodeConst;
 import org.apache.jena.sparql.syntax.*;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import sr.obep.parser.delp.EventCalculusDecl;
 import sr.obep.parser.delp.EventDecl;
 import sr.obep.parser.sparql.SPARQLQuery;
@@ -121,11 +121,8 @@ public class OBEPQuery extends SPARQLQuery {
         return eventDeclarations.get(peek);
     }
 
-}import java.util.Set;
+    public Set<OWLEquivalentClassesAxiom> getEventDefinitions() {
+        return null;
+    }
 
-import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
-
-public interface OBEPQuery {
-
-	public Set<OWLEquivalentClassesAxiom> getEventDefinitions();
 }

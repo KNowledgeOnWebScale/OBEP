@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.semanticweb.owlapi.model.OWLOntology;
 import sr.obep.abstration.Abstracter;
-import sr.obep.cep.EventProcessor;
+import sr.obep.cep.EventProcessorImpl;
 import sr.obep.extraction.Extractor;
 
 /**
@@ -18,7 +18,7 @@ public class OBEPEngineImpl implements OBEPEngine{
 
     private Abstracter abstracter;
     private Extractor extractor;
-    private EventProcessor cep;
+    private EventProcessorImpl cep;
 
 
     public void setOntology(OWLOntology o) {
