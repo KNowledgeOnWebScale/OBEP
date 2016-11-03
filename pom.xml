@@ -8,13 +8,14 @@
 	<artifactId>obep</artifactId>
 	<version>1.0</version>
 
-	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-arq -->
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-arq</artifactId>
-			<version>3.0.0</version>
-		</dependency>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.jena/jena-arq -->
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-arq</artifactId>
+            <version>3.1.0</version>
+        </dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.hermit-reasoner/org.semanticweb.hermit -->
 		<dependency>
@@ -30,12 +31,25 @@
 			<version>5.3.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.16.10</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.parboiled</groupId>
+            <artifactId>parboiled-core</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.parboiled</groupId>
+            <artifactId>parboiled-java</artifactId>
+            <version>1.1.7</version>
+        </dependency><!-- https://mvnrepository.com/artifact/junit/junit -->
+    </dependencies>
+
 
 </project>
