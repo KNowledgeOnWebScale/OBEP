@@ -17,7 +17,7 @@ public class ExtractionTest extends TestCase{
 	}
 	
 	public void testQuery(){
-		extractor.sendEvent(AbstracterTest.createEvent());
+		extractor.sendEvent(AbstracterTest.createTempEvent());
 		System.out.println(engine.getReceivedEvent().getProperties());
 		assertNotNull(engine.getReceivedEvent().getProperties());
 	}

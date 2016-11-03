@@ -1,9 +1,8 @@
-package sr.obep;
+package sr.obep.cep;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.riot.system.IRIResolver;
 import org.parboiled.Parboiled;
@@ -12,16 +11,22 @@ import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 
 import junit.framework.TestCase;
+import sr.obep.OBEPQuery;
+import sr.obep.abstraction.OBEPTestEngine;
 import sr.obep.parser.delp.DELPParser;
 import sr.obep.parser.delp.EventCalculusDecl;
 import sr.obep.parser.delp.EventDecl;
 
-
-public class OBEPEngineTest extends TestCase{
-
+public class EventProcessingTest extends TestCase{
+	
+	private EventProcessor cep;
+	private OBEPTestEngine testEngine;
 	public void setUp(){
-		String input = getFile("src/test/resources/test.query");
-		System.out.println(input);
+		testEngine = new OBEPTestEngine();
+
+		cep = new EventProcessorImpl();
+		cep.init(testEngine);
+		String input = getFile("src/test/resources/test2.query");
 		DELPParser parser = Parboiled.createParser(DELPParser.class);
 
         parser.setResolver(IRIResolver.create());
@@ -36,10 +41,7 @@ public class OBEPEngineTest extends TestCase{
         }
 
         OBEPQuery q = result.resultValue;
-        for (EventDecl event : q.getEventCalculusDecls()) {
-			EventCalculusDecl ecd = (EventCalculusDecl) event;
-			System.out.println(ecd);
-        }
+        cep.registerQuery(q);
 	}
 	
 	public void testQuery(){

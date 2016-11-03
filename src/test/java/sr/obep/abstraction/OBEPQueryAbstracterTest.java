@@ -23,10 +23,11 @@ public class OBEPQueryAbstracterTest implements OBEPQuery{
 	public  Set<OWLEquivalentClassesAxiom> getEventDefinitions() {
 		Set<OWLEquivalentClassesAxiom> eventDefs = new HashSet<OWLEquivalentClassesAxiom>();
 		eventDefs.add(createSmokeFilter());
+		eventDefs.add(createTempFilter());
 		return eventDefs;
 	}
 	
-	private static OWLEquivalentClassesAxiom createSmokeFilter(){
+	private static OWLEquivalentClassesAxiom createTempFilter(){
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLDataFactory factory = manager.getOWLDataFactory();
 		
@@ -35,6 +36,24 @@ public class OBEPQueryAbstracterTest implements OBEPQuery{
 		OWLObjectProperty hasContextProp = factory.getOWLObjectProperty(ONT_SSNIOT_IRI+"hasContext");
 		OWLObjectProperty observedProperty = factory.getOWLObjectProperty(ONT_SSN_IRI + "observedProperty");
 		OWLClass propCls = factory.getOWLClass(ONT_SSNIOT_IRI+"Temperature");
+
+		return factory.getOWLEquivalentClassesAxiom(
+				owlFilter,
+				factory.getOWLObjectSomeValuesFrom(
+						hasContextProp,
+						factory.getOWLObjectSomeValuesFrom(observedProperty,propCls)
+				)
+		);
+	}
+	private static OWLEquivalentClassesAxiom createSmokeFilter(){
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		OWLDataFactory factory = manager.getOWLDataFactory();
+		
+		OWLClass owlFilter = factory.getOWLClass(ONT_SSNIOT_IRI+"SmokeFilter");
+		
+		OWLObjectProperty hasContextProp = factory.getOWLObjectProperty(ONT_SSNIOT_IRI+"hasContext");
+		OWLObjectProperty observedProperty = factory.getOWLObjectProperty(ONT_SSN_IRI + "observedProperty");
+		OWLClass propCls = factory.getOWLClass(ONT_SSNIOT_IRI+"Smoke");
 
 		return factory.getOWLEquivalentClassesAxiom(
 				owlFilter,

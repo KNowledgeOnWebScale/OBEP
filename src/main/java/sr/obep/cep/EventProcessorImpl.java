@@ -1,21 +1,24 @@
 package sr.obep.cep;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.jena.graph.Node;
+import org.apache.jena.query.Query;
+
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
-import com.espertech.esper.client.EPStatement;
+
 import lombok.extern.log4j.Log4j;
-import org.apache.jena.query.Query;
-import org.semanticweb.owlapi.model.OWLOntology;
 import sr.obep.OBEPEngine;
 import sr.obep.OBEPQuery;
 import sr.obep.SemanticEvent;
+import sr.obep.parser.delp.DLEventDecl;
 import sr.obep.parser.delp.EventCalculusDecl;
 import sr.obep.parser.delp.EventDecl;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Riccardo on 03/11/2016.
@@ -46,22 +49,37 @@ public class EventProcessorImpl implements EventProcessor {
 
 	public void registerQuery(OBEPQuery q) {
 		this.filterQueries = new HashMap<EventDecl, Query>();
-
 		for (EventDecl event : q.getEventCalculusDecls()) {
 			EventCalculusDecl ecd = (EventCalculusDecl) event;
-			log.info("Registering Match clause <" + ecd.toEpl() + ">");
-			EPStatement epStatement = epService.getEPAdministrator().create(ecd.toEpl());
-			// TODO check inherits
-			EventListener eListener = new EventListener();
-			// TODO: do we need a new listerner here for each query??
-			epStatement.addListener(eListener);
+			for (Map.Entry<Node, EventDecl> en : q.getEventDeclarations().entrySet()) {
+				if (en.getValue() instanceof DLEventDecl) {
+					sr.obep.parser.delp.DLEventDecl dl = (DLEventDecl) en.getValue();
+					String s = dl.toEPLSchema(ecd.getJoinVariables());
+					System.out.println(s);
+					epService.getEPAdministrator().createEPL(s);
+				}
 
-			/*
-			 * String eplProps = converVarsToEPLProps(ifdec.getVars());
-			 * epService.getEPAdministrator().createEPL("create schema " + event
-			 * + "("+eplProps+") inherits TEvent");
-			 */
+			}
+
+			
+			epService.getEPAdministrator().create(ecd.toEpl());
 		}
+
+//		for (EventDecl event : q.getEventCalculusDecls()) {
+//			EventCalculusDecl ecd = (EventCalculusDecl) event;
+//			log.info("Registering Match clause <" + ecd.toEpl() + ">");
+//			EPStatement epStatement = epService.getEPAdministrator().create(ecd.toEpl());
+//			// TODO check inherits
+//			EventListener eListener = new EventListener();
+//			// TODO: do we need a new listerner here for each query??
+//			epStatement.addListener(eListener);
+//
+//			/*
+//			 * String eplProps = converVarsToEPLProps(ifdec.getVars());
+//			 * epService.getEPAdministrator().createEPL("create schema " + event
+//			 * + "("+eplProps+") inherits TEvent");
+//			 */
+//		}
 	}
 
 	public void sendEvent(SemanticEvent se) {
