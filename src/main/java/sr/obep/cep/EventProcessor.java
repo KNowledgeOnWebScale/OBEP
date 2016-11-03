@@ -9,8 +9,6 @@ public interface EventProcessor {
 
     public void init(OBEPEngine obep);
 
-    public void setOntology(OWLOntology o);
-
     public void registerQuery(OBEPQuery q);
 
     public void sendEvent(SemanticEvent se);

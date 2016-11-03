@@ -19,6 +19,9 @@ import sr.obep.OBEPEngine;
 import sr.obep.querying.OBEPQuery;
 import sr.obep.querying.OBEPQueryImpl;
 import sr.obep.SemanticEvent;
+/**
+ * Created by pbonte on 03/11/2016.
+ */
 
 @Setter
 @Getter

@@ -7,13 +7,11 @@ import sr.obep.querying.OBEPQuery;
 import sr.obep.SemanticEvent;
 
 /**
- * Created by Riccardo on 03/11/2016.
+ * Created by pbonte on 03/11/2016.
  */
 public interface Extractor {
 
 	public void init(OBEPEngine obep);
-
-	public void setOntology(OWLOntology o);
 
 	public void registerQuery(OBEPQuery q);
 

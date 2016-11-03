@@ -37,6 +37,9 @@ import sr.obep.OBEPEngine;
 import sr.obep.querying.OBEPQuery;
 import sr.obep.SemanticEvent;
 
+/**
+ * Created by pbonte on 03/11/2016.
+ */
 @Slf4j
 public class ExtractorImpl implements Extractor {
 
@@ -53,13 +56,6 @@ public class ExtractorImpl implements Extractor {
 	@Override
 	public void init(OBEPEngine obep) {
 		this.obep = obep;
-
-	}
-
-	@Override
-	public void setOntology(OWLOntology o) {
-		// this.ontology = o;
-		// this.manager = o.getOWLOntologyManager();
 
 	}
 

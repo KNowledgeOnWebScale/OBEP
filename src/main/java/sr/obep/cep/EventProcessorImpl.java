@@ -15,6 +15,7 @@ import sr.obep.parser.delp.EventDecl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Riccardo on 03/11/2016.
@@ -22,89 +23,110 @@ import java.util.Map;
 @Log4j
 public class EventProcessorImpl implements EventProcessor {
 
-    private EPServiceProvider epService;
-    private Map<EventDecl, Query> filterQueries;
+	private EPServiceProvider epService;
+	private Map<EventDecl, Query> filterQueries;
 
-    public void init(OBEPEngine obep) {
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("packedId", "string");
+	public void init(OBEPEngine obep) {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("packedId", "string");
 
-        properties.put("ts", "long");
-        properties.put("content", SemanticEvent.class);
+		properties.put("ts", "long");
+		properties.put("content", SemanticEvent.class);
 
-        Configuration configuration = new Configuration();
-        configuration.addEventType("TEvent", properties);
-        configuration.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
-        configuration.getEngineDefaults().getLogging().setEnableExecutionDebug(true);
-        configuration.getEngineDefaults().getLogging().setEnableTimerDebug(true);
-        this.epService = EPServiceProviderManager.getDefaultProvider(configuration);
+		Configuration configuration = new Configuration();
+		configuration.addEventType("TEvent", properties);
+		configuration.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
+		configuration.getEngineDefaults().getLogging().setEnableExecutionDebug(true);
+		configuration.getEngineDefaults().getLogging().setEnableTimerDebug(true);
+		this.epService = EPServiceProviderManager.getDefaultProvider(configuration);
 
-        // disable internal clock
+		// disable internal clock
 
-    }
+	}
 
-    public void setOntology(OWLOntology o) {
-        //TODO
-    }
+	public void registerQuery(OBEPQuery q) {
+		this.filterQueries = new HashMap<EventDecl, Query>();
 
-    public void registerQuery(OBEPQuery q) {
-        this.filterQueries = new HashMap<EventDecl, Query>();
+		for (EventDecl event : q.getEventCalculusDecls()) {
+			EventCalculusDecl ecd = (EventCalculusDecl) event;
+			log.info("Registering Match clause <" + ecd.toEpl() + ">");
+			EPStatement epStatement = epService.getEPAdministrator().create(ecd.toEpl());
+			// TODO check inherits
+			EventListener eListener = new EventListener();
+			// TODO: do we need a new listerner here for each query??
+			epStatement.addListener(eListener);
 
-        for (EventDecl event : q.getEventCalculusDecls()) {
-            EventCalculusDecl ecd = (EventCalculusDecl) event;
-            log.info("Registering Match clause <" + ecd.toEpl() + ">");
-            EPStatement epStatement = epService.getEPAdministrator().create(ecd.toEpl());
-            //TODO check inherits
-            EventListener eListener = new EventListener();
-            // TODO: do we need a new listerner here for each query??
-            epStatement.addListener(eListener);
+			/*
+			 * String eplProps = converVarsToEPLProps(ifdec.getVars());
+			 * epService.getEPAdministrator().createEPL("create schema " + event
+			 * + "("+eplProps+") inherits TEvent");
+			 */
+		}
+	}
 
-            /*
-            String eplProps = converVarsToEPLProps(ifdec.getVars());
-            epService.getEPAdministrator().createEPL("create schema " + event + "("+eplProps+") inherits TEvent");*/
-        }
-    }
+	public void sendEvent(SemanticEvent se) {
+		Set<String> triggeredFilters = se.getTriggeredFilterIRIs();
 
-    public void sendEvent(SemanticEvent se) {
-        //TODO
-    }
+		for (String trigger : triggeredFilters) {
+			String eventType = stripFilterName(trigger);
 
-    /**
-     * Add an OWLMessage to the event processor for further processing using the
-     * defined event calculus. (runs in a different thread)
-     *
-     * @param message
+			Map<String, Object> eventMap = new HashMap<String, Object>();
+			eventMap.put("packedId", se.getPacketID());
+			eventMap.put("ts", System.currentTimeMillis());
+			eventMap.put("content", se);			
+			eventMap.putAll(se.getProperties());
 
-    private void put(SemanticEvent message) {
-    Set<String> triggeredFilters = message.getTriggeredFilters();
+			log.info("Adding Event (" + this + ") " + eventMap);
+			epService.getEPRuntime().sendEvent(eventMap, eventType);
+		}
+	}
 
-    for (String trigger : triggeredFilters) {
-    Map<String, Object> eventMap = new HashMap<String, Object>();
-    String eventType = stripFilterName(trigger);
-    if (filterQueries.containsKey(eventType)) {
-    List<Map<String, String>> queryResults = qFactory.query(message.getAxioms(),
-    filterQueries.get(eventType));
-    String value = "";
-    String key = "";
-    for (Map<String, String> result : queryResults) {
-    for (Entry<String, String> entryResult : result.entrySet()) {
-    value = entryResult.getValue();
-    key = entryResult.getKey();
-    eventMap.put(key, value);
-    }
-    }
+	/**
+	 * Strings the prefixes from the filter e.g. test.prefix/test.owl#Filter
+	 * becomes Filter.
+	 * 
+	 * @param longName
+	 *            The name of the filter containing the prefixes
+	 * @return
+	 */
+	private String stripFilterName(String longName) {
+		if (longName.contains("#")) {
+			return longName.substring(longName.lastIndexOf('#') + 1);
 
-    // eventMap.put("eventType", eventType);
-    eventMap.put("packedId", message.getPacketID());
-    eventMap.put("ts", System.currentTimeMillis());
-    eventMap.put("content", message);
-
-    logger.info("Adding Event (" + this + ") " + eventMap);
-    epService.getEPRuntime().sendEvent(eventMap, eventType);
-    } else {
-    logger.error("Event <" + eventType + "> not declared.");
-    }
-    }
-
-    }  **/
+		} else {
+			return longName.substring(longName.lastIndexOf('/') + 1);
+		}
+	}
+	/**
+	 * Add an OWLMessage to the event processor for further processing using the
+	 * defined event calculus. (runs in a different thread)
+	 *
+	 * @param message
+	 * 
+	 *            private void put(SemanticEvent message) { Set<String>
+	 *            triggeredFilters = message.getTriggeredFilters();
+	 * 
+	 *            for (String trigger : triggeredFilters) { Map<String, Object>
+	 *            eventMap = new HashMap<String, Object>(); String eventType =
+	 *            stripFilterName(trigger); if
+	 *            (filterQueries.containsKey(eventType)) { List<Map<String,
+	 *            String>> queryResults = qFactory.query(message.getAxioms(),
+	 *            filterQueries.get(eventType)); String value = ""; String key =
+	 *            ""; for (Map<String, String> result : queryResults) { for
+	 *            (Entry<String, String> entryResult : result.entrySet()) {
+	 *            value = entryResult.getValue(); key = entryResult.getKey();
+	 *            eventMap.put(key, value); } }
+	 * 
+	 *            // eventMap.put("eventType", eventType);
+	 *            eventMap.put("packedId", message.getPacketID());
+	 *            eventMap.put("ts", System.currentTimeMillis());
+	 *            eventMap.put("content", message);
+	 * 
+	 *            logger.info("Adding Event (" + this + ") " + eventMap);
+	 *            epService.getEPRuntime().sendEvent(eventMap, eventType); }
+	 *            else { logger.error("Event <" + eventType + "> not
+	 *            declared."); } }
+	 * 
+	 *            }
+	 **/
 }
