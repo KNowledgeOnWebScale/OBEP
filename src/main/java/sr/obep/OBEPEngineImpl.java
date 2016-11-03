@@ -30,6 +30,15 @@ public class OBEPEngineImpl implements OBEPEngine{
     }
 
     public void sendEvent(SemanticEvent se) {
-
+    	//TODO add SemanticEvent hierarchy
+    	if(se.getTriggeredFilterIRIs() == null ){
+    		abstracter.sendEvent(se);
+    	}
+    	if(se.getTriggeredFilterIRIs()!= null && !se.getTriggeredFilterIRIs().isEmpty() && se.getProperties() == null){
+    		extractor.sendEvent(se);
+    	}
+    	if(se.getProperties() != null){
+    		cep.sendEvent(se);
+    	}
     }
 }
