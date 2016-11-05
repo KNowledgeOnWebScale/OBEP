@@ -1,9 +1,8 @@
 package sr.obep.cep;
 
-import org.semanticweb.owlapi.model.OWLOntology;
 import sr.obep.OBEPEngine;
-import sr.obep.OBEPQuery;
 import sr.obep.SemanticEvent;
+import sr.obep.querying.OBEPQuery;
 
 public interface EventProcessor {
 
@@ -12,4 +11,5 @@ public interface EventProcessor {
     public void registerQuery(OBEPQuery q);
 
     public void sendEvent(SemanticEvent se);
+
 }

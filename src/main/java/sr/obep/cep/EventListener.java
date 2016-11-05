@@ -3,8 +3,8 @@ package sr.obep.cep;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 import com.espertech.esper.event.map.MapEventBean;
-import sr.obep.SemanticEvent;
 import lombok.extern.log4j.Log4j;
+import sr.obep.SemanticEvent;
 
 import java.util.ArrayList;
 import java.util.List;
