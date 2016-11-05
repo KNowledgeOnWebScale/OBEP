@@ -21,16 +21,21 @@ public class SemanticEvent implements Serializable {
     private Set<String> triggeredFilterIRIs;
     private long timeStamp;
     private String stream;
-    private Map<String,String> properties;
+    private Map<String, String> properties;
 
-    public SemanticEvent(OWLNamedIndividual message, String packetID, long timeStamp, String stream){
-    	this.axioms = new HashSet<OWLAxiom>();
-    	this.message = message;
-    	this.packetID = packetID;
-    	this.timeStamp = timeStamp;
-    	this.stream = stream;
+    public SemanticEvent(OWLNamedIndividual message, String packetID, long timeStamp, String stream) {
+        this.axioms = new HashSet<OWLAxiom>();
+        this.message = message;
+        this.packetID = packetID;
+        this.timeStamp = timeStamp;
+        this.stream = stream;
     }
-    public void addAxiom(OWLAxiom ax){
-    	this.axioms.add(ax);
+
+    public void addAxiom(OWLAxiom ax) {
+        this.axioms.add(ax);
+    }
+
+    public Set<String> getTriggeredFilters() {
+        return null;
     }
 }

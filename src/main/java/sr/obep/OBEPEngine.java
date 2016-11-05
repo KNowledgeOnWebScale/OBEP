@@ -1,6 +1,8 @@
 package sr.obep;
 
 import org.semanticweb.owlapi.model.OWLOntology;
+import sr.obep.querying.OBEPQueryImpl;
+import sr.obep.querying.QueryConsumer;
 
 
 /**
@@ -8,9 +10,11 @@ import org.semanticweb.owlapi.model.OWLOntology;
  */
 public interface OBEPEngine {
 
+    public void init(OBEPEngine obep);
+
     public void setOntology(OWLOntology o);
 
-    public void registerQuery(OBEPQuery q, QueryConsumer c );
+    public void registerQuery(OBEPQueryImpl q, QueryConsumer c);
 
     public void sendEvent(SemanticEvent se);
 }
