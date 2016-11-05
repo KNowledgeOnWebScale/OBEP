@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Var;
-import sr.obep.parser.delp.EventDecl;
 
 import java.io.StringWriter;
 import java.util.*;

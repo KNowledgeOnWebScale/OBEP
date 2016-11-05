@@ -2,8 +2,8 @@ package sr.obep.parser.delp;
 
 import org.apache.jena.graph.Node;
 import org.parboiled.Rule;
-import sr.obep.OBEPQuery;
 import sr.obep.parser.sparql.SPARQLParser;
+import sr.obep.querying.OBEPQueryImpl;
 
 /**
  * Created by Riccardo on 09/08/16.
@@ -12,20 +12,20 @@ public class DELPParser extends SPARQLParser {
 
     @Override
     public Rule Query() {
-        return Sequence(push(new OBEPQuery()), WS(), Prologue(),
+        return Sequence(push(new OBEPQueryImpl()), WS(), Prologue(),
                 OneOrMore(CreateEventClause()), EOI);
     }
 
     public Rule CreateEventClause() {
         return Sequence(NAMED(), EVENT(), IriRef(),
                 FirstOf(
-                        Sequence(AS(), push(new DLEventDecl((Node) pop())), DLEventDeclaration(), setDLRule()),
-                        Sequence(OPEN_CURLY_BRACE(), push(new EventCalculusDecl((Node) pop())), EventCalculusDeclaration(), CLOSE_CURLY_BRACE()))
-                , pushQuery(((OBEPQuery) popQuery(-1)).addEventDecl((EventDecl) pop())), Optional(DOT()));
+                        Sequence(OPEN_CURLY_BRACE(), push(new EventCalculusDecl((Node) pop())), EventCalculusDeclaration(), CLOSE_CURLY_BRACE()),
+                        Sequence(push(new DLEventDecl((Node) pop())), DLEventDeclaration(), setDLRule()))
+                , pushQuery(((OBEPQueryImpl) popQuery(-1)).addEventDecl((EventDecl) pop())), Optional(DOT()));
     }
 
     public Rule DLEventDeclaration() {
-        return ZeroOrMore(Sequence(TestNot(FirstOf(DOT(), NAMED()), ANY), WS()));
+        return ZeroOrMore(Sequence(TestNot(FirstOf(EVENT(), NAMED())), ANY), WS());
     }
 
     public Rule EventCalculusDeclaration() {
@@ -84,7 +84,7 @@ public class DELPParser extends SPARQLParser {
     public Rule GuardPostFix() {
         return FirstOf(
                 Sequence(LPAR(), PatternExpression(), RPAR(), push(new PatternCollector((PatternCollector) pop()))),
-                Sequence(VarOrIRIref(), push(((OBEPQuery) getQuery(-1)).getEventDecl((Node) peek())),
+                Sequence(VarOrIRIref(), push(((OBEPQueryImpl) getQuery(-1)).getEventDecl((Node) peek())),
                         push(new PatternCollector((EventDecl) pop(), (Node) pop()))));
 
     }
@@ -94,7 +94,7 @@ public class DELPParser extends SPARQLParser {
 
     @Override
     public boolean startSubQuery(int i) {
-        return push(new OBEPQuery(getQuery(i).getQ().getPrologue()));
+        return push(new OBEPQueryImpl(getQuery(i).getQ().getPrologue()));
     }
 
     // MQL
